@@ -1,64 +1,62 @@
 fetch("http://localhost:3000/api/products")
 .then((res) => res.json())
-.then((data) => indexDisplayProducts(data))
+.then((productsDonnees) => indexProductsDisplayAdd(productsDonnees))
 
-indexDisplayProducts = canap => {
-  canap.forEach((canap) => {
-    const { _id, imageUrl, altTxt, name, description} = canap
-    const indexProductAnchor = makeIndexProductsAnchor(_id)
-    const indexProductArticle = document.createElement("article")
-    const indexProductImage = makeIndexImage(imageUrl, altTxt)
-    const indexProductSubtitle = makeIndexProductSubtitle(name)
-    const indexProductParagraph = makeIndexProductParagraph(description)
+indexProductsDisplayAdd = canap => {
+  canap.forEach((indexCanap) => {
+    const { _id, imageUrl, altTxt, name, description } = indexCanap
+    
+    const indexProductsArticle = document.createElement("article")
+    const indexProductsAnchor = indexMakeProductAnchor(_id)
+    const indexProductsImage = indexMakeImgOnDiv(imageUrl, altTxt)
+    const indexProductsSubtitle = indexMakeSubtitle(name)
+    const indexProductsParagraph = indexMakeParagraph(description)
 
-    indexAppendProductElements(indexProductArticle, [indexProductImage, indexProductSubtitle, indexProductParagraph])
-    indexAppendArticleToAnchor(indexProductAnchor, indexProductArticle)
+    indexElementsToArticle(indexProductsArticle, [indexProductsImage, indexProductsSubtitle, indexProductsParagraph])
+    indexArticleElementsToAnchor(indexProductsAnchor, indexProductsArticle)
   })
 }
-/* Créations des élements à inclure dans l'article */
-makeIndexProductsAnchor = id => {
-  const anchorProduct = document.createElement("a")
-  anchorProduct.href = "./product.html?id=" + id
-  return anchorProduct
+
+/* On crée les différents élements à implémenter + bas */ 
+indexMakeProductAnchor = id => {
+  const linka = document.createElement("a")
+  linka.href = "./product.html?id=" + id
+  return linka
 }
 
-makeIndexImage = (imageUrl, altTxt) => {
- const imageProduct = document.createElement("img")
- imageProduct.src = imageUrl
- imageProduct.alt = altTxt
- imageProduct.removeAttribute("title")
- imageProduct.removeAttribute("style")
- return imageProduct
+indexMakeImgOnDiv = (imageUrl, altTxt) => {
+  const image = document.createElement("img")
+  image.src = imageUrl
+  image.alt = altTxt
+  return image
 }
 
-makeIndexProductSubtitle = name => {
-  const subtitleProduct = document.createElement("h3")
-  subtitleProduct.textContent = name
-  subtitleProduct.classList.add("productName")
-  return subtitleProduct
+indexMakeSubtitle = name => {
+  const sub = document.createElement("h3")
+  sub.textContent = name
+  sub.classList.add("productName")
+  return sub
 }
 
-makeIndexProductParagraph = description => {
-  const paragraphProduct = document.createElement("p")
-  paragraphProduct.textContent = description
-  paragraphProduct.classList.add("productDescription")
-  return paragraphProduct
+indexMakeParagraph = description => {
+  const paragraph = document.createElement("p")
+  paragraph.textContent = description
+  paragraph.classList.add("productDescription")
+  return paragraph
 }
 
+//On implémente les différents élements dans les fonctions "mères"
 
-/* Créations des fonctions pour pour appendChild (donc inclure dedans) */ 
+indexElementsToArticle = (article, table) => {
+  table.forEach((indexItemProduct) => {
+    article.appendChild(indexItemProduct)
+  })
+}
 
-indexAppendArticleToAnchor = (anchor, article) => {
-  const itemsProduct = document.querySelector("#items")
-  if (itemsProduct != null){
-    itemsProduct.appendChild(anchor)
-    itemsProduct.appendChild(article)
+indexArticleElementsToAnchor = (anchor, article) => {
+  const indexItemProduct = document.querySelector("#items")
+  if (indexItemProduct != null) {
+    indexItemProduct.appendChild(anchor)
+    anchor.appendChild(article)
   }
 }
-
-indexAppendProductElements = (article, arrayProductItems) =>{
-  arrayProductItems.forEach((itemsProduct) => {
-    article.appendChild(itemsProduct)
-  })
-}
-

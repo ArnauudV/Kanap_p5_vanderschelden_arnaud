@@ -1,95 +1,114 @@
-const productQueryString = window.location.search
-const productUrlParams = new URLSearchParams(productQueryString)
-const productId = productUrlParams.get("id")
-if (productId != null){
-  let imgurl, altText, articleName
+const productQuery = window.location.search
+const productURLSearchParams = new URLSearchParams(productQuery)
+const productID = productURLSearchParams.get("id")
+
+if (productID != null) {
   let itemPrice = 0
+  let imgUrl, altText, articleName
 }
 
-fetch(`http://localhost:3000/api/products/${productId}`)
+fetch(`http://localhost:3000/api/products/${productID}`)
 .then((response) => response.json())
-.then((res) => productDataRestore(res))
+.then((res) => productDataRecovery(res))
 
-productDataRestore = productCanaps => {
-  const { altTxt, colors, description, imageUrl, name, price} = productCanaps
-  makeProductImage(imageUrl, altTxt)
-  makeProductSubtitle(name)
-  makeProductDescription(description)
-  makeProductColors(colors)
-  makeProductPrice(price)
+productDataRecovery = canap => {
+  const {altTxt, colors, description, imageUrl, name, price} = canap
+  itemPrice = price
+  imgUrl = imageUrl
+  altText = altTxt
+  articleName = name
+  productMakeImage(imageUrl, altTxt)
+  productMakeColors(colors)
+  productMakeSubtitle(name)
+  productMakeDescription(description)
+  productMakePrice(price)  
 }
 
-/* Créations des éléments de la page Product */
-makeProductImage = (imageUrl, altTxt) => {
-  const imageProduct = document.createElement("img")
-  imageProduct.src = imageUrl
-  imageProduct.alt = altTxt 
-}
+//On crée les éléments qui vont être implémentés
 
-makeProductSubtitle = name => {
-    const subtitleProduct = document.querySelector("#title")
-    if(subtitleProduct != null){
-      subtitleProduct.textContent = name
-    }
-}
-
-makeProductDescription = description => {
-  const paragraphProduct = document.querySelector("#description")
-  if(paragraphProduct != null){
-    paragraphProduct.textContent = description
+productMakeImage = (imageUrl, altTxt) => {
+  const productImage = document.createElement("img")
+  const productImageImplement = document.querySelector(".item__img")
+  productImage.src = imageUrl
+  productImage.alt = altTxt
+  if(productImageImplement != null){
+    productImageImplement.appendChild(productImage)
   }
 }
 
-makeProductColors = colors => {
-  const colorsProduct = document.querySelector("#colors")
-  if(colorsProduct != null){
-    colors.forEach((colorsOptions) => {
-      const optionColorsProduct = document.createElement("option")
-      optionColorsProduct.value = colorsOptions
-      optionColorsProduct.textContent = colorsOptions
-      colorsProduct.appendChild(optionColorsProduct)
+productMakeColors = colors => {
+  const productColorsSelect = document.querySelector("#colors")
+  if(productColorsSelect != null)
+  {
+    colors.forEach((color) => {
+      const productColorsOptions = document.createElement("option")
+      productColorsOptions.value = color
+      productColorsOptions.textContent = color
+      productColorsSelect.appendChild(productColorsOptions)
     })
   }
 }
 
-makeProductPrice = price => {
-  const priceProduct = document.querySelector("#price")
-  if(priceProduct != null){
-    priceProduct.textContent = price
+productMakeSubtitle = name => {
+  const productSubtitle = document.querySelector("#title")
+  if(productSubtitle != null){
+    productSubtitle.textContent = name
   }
 }
 
-/* Création fonction pour sauvegarder le panier */
-const buttonProductToCart = document.querySelector("addToCart")
-buttonProductToCart.addEventListener("click", linkProductToCart)
+productMakeDescription = description => {
+  const paragraph = document.querySelector("#description")
+  if(paragraph != null){
+    paragraph.textContent = description
+  }
+}
 
-saveProductForOrder = (color, quantity) => {
-  const productkey = `${id}-${color}`
-  const productData = {
-    id: id,
-    imageUrl: ImgUrl,
-    altTxt: altText,
-    color: color,
-    quantity: Number(quantity),
-    price:ItemPrice,
+productMakePrice = price => {
+  const productPriceDisplay = document.querySelector("#price")
+  if(productPriceDisplay != null){
+    productPriceDisplay.textContent = price
+  }
+}
+
+//fonctionnalités du bouton
+
+//Déclaration variable globale button
+
+
+const productButtonValid = document.querySelector("#addToCart")
+productButtonValid.addEventListener("click", productButtonClick)
+
+function productButtonClick() {
+  const colorValidation = document.querySelector("#colors").value
+  const quantityValidation = document.querySelector("#quantity").value
+
+  if (productCheckCommandInvalid(colorValidation, quantityValidation)) return
+    productSaveCommand(colorValidation, quantityValidation)
+    redirectToCart()
+    
+  
+}
+
+productSaveCommand = (commandColor, commandQuantity) => {
+  const productIDRecover = `${productID}-${commandColor}`
+  const productCommandData = {
+    id: productID,
+    color: commandColor,
+    imageUrl: imgUrl,
+    altTxt : altText,
+    quantity: Number(commandQuantity),
+    price: itemPrice,
     name: articleName
   }
-  localStorage.setItem(productkey, JSON.stringify(productData))
-}
-//  Création du bouton de click et check la validité
-productOrderInvalidForClick = (colorProduct, quantityProduct) => {
-  if(colorProduct == null || colorProduct === "" || quantityProduct == 0){
-    alert("attention, veuillez sélectionner une couleur et le nombre de canapés à acheter")
-    return true 
-  }
+  localStorage.setItem(productIDRecover, JSON.stringify(productCommandData))
 }
 
-linkProductToCart = () => {
-  const colorProduct = document.querySelector("#colors").value
-  const quantityProduct = document.querySelector("#quantity").value
-  if(productOrderInvalidForClick(colorProduct, quantityProduct)){
-    saveProductForOrder(colorProduct, quantityProduct)
-    window.location.href = "cart.html"
-    return
+productCheckCommandInvalid = (commandColor, commandQuantity) => {
+  if(commandColor == null || commandColor === "" || commandQuantity == null || commandQuantity == 0){
+    alert("veuillez sélectionner une couleur ET une quantité de canapés à commander")
+    return true
   }
+}
+function redirectToCart() {
+  window.location.href = "cart.html"
 }
