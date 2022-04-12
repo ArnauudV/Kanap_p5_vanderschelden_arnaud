@@ -1,62 +1,66 @@
 fetch("http://localhost:3000/api/products")
-.then((res) => res.json())
-.then((productsDonnees) => indexProductsDisplayAdd(productsDonnees))
+  .then((res) => res.json())
+  .then((productsDonnees) => indexProductsDisplayAdd(productsDonnees));
 
-indexProductsDisplayAdd = canap => {
+function indexProductsDisplayAdd(canap){
   canap.forEach((indexCanap) => {
-    const { _id, imageUrl, altTxt, name, description } = indexCanap
-    
-    const indexProductsArticle = document.createElement("article")
-    const indexProductsAnchor = indexMakeProductAnchor(_id)
-    const indexProductsImage = indexMakeImgOnDiv(imageUrl, altTxt)
-    const indexProductsSubtitle = indexMakeSubtitle(name)
-    const indexProductsParagraph = indexMakeParagraph(description)
+    const { _id, imageUrl, altTxt, name, description } = indexCanap;
 
-    indexElementsToArticle(indexProductsArticle, [indexProductsImage, indexProductsSubtitle, indexProductsParagraph])
-    indexArticleElementsToAnchor(indexProductsAnchor, indexProductsArticle)
-  })
-}
+    const indexProductsArticle = document.createElement("article");
+    const indexProductsAnchor = indexMakeProductAnchor(_id);
+    const indexProductsImage = indexMakeImgOnDiv(imageUrl, altTxt);
+    const indexProductsSubtitle = indexMakeSubtitle(name);
+    const indexProductsParagraph = indexMakeParagraph(description);
 
-/* On crée les différents élements à implémenter + bas */ 
-indexMakeProductAnchor = id => {
-  const linka = document.createElement("a")
-  linka.href = "./product.html?id=" + id
-  return linka
-}
+    indexElementsToArticle(indexProductsArticle, [
+      indexProductsImage,
+      indexProductsSubtitle,
+      indexProductsParagraph,
+    ]);
+    indexArticleElementsToAnchor(indexProductsAnchor, indexProductsArticle);
+  });
+};
 
-indexMakeImgOnDiv = (imageUrl, altTxt) => {
-  const image = document.createElement("img")
-  image.src = imageUrl
-  image.alt = altTxt
-  return image
-}
+/* On crée les différents élements à implémenter + bas */
+function indexMakeProductAnchor(id){
+  const linka = document.createElement("a");
+  linka.href = "./product.html?id=" + id;
+  return linka;
+};
 
-indexMakeSubtitle = name => {
-  const sub = document.createElement("h3")
-  sub.textContent = name
-  sub.classList.add("productName")
-  return sub
-}
+function indexMakeImgOnDiv(imageUrl, altTxt){
+  const image = document.createElement("img");
+  image.src = imageUrl;
+  image.alt = altTxt;
+  return image;
+};
 
-indexMakeParagraph = description => {
-  const paragraph = document.createElement("p")
-  paragraph.textContent = description
-  paragraph.classList.add("productDescription")
-  return paragraph
-}
+function indexMakeSubtitle(name){
+  const sub = document.createElement("h3");
+  sub.textContent = name;
+  sub.classList.add("productName");
+  return sub;
+};
+
+function indexMakeParagraph(description){
+  const paragraph = document.createElement("p");
+  paragraph.textContent = description;
+  paragraph.classList.add("productDescription");
+  return paragraph;
+};
 
 //On implémente les différents élements dans les fonctions "mères"
 
-indexElementsToArticle = (article, table) => {
+function indexElementsToArticle(article, table){
   table.forEach((indexItemProduct) => {
-    article.appendChild(indexItemProduct)
-  })
-}
+    article.appendChild(indexItemProduct);
+  });
+};
 
-indexArticleElementsToAnchor = (anchor, article) => {
-  const indexItemProduct = document.querySelector("#items")
+function indexArticleElementsToAnchor(anchor, article){
+  const indexItemProduct = document.querySelector("#items");
   if (indexItemProduct != null) {
-    indexItemProduct.appendChild(anchor)
-    anchor.appendChild(article)
+    indexItemProduct.appendChild(anchor);
+    anchor.appendChild(article);
   }
-}
+};
