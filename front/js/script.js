@@ -59,7 +59,7 @@ function indexElementsToArticle(article, table){
 
 function indexArticleElementsToAnchor(anchor, article){
   const indexItemProduct = document.querySelector("#items");
-  if (indexItemProduct != null) {
+  if (indexItemProduct) {
     indexItemProduct.appendChild(anchor);
     anchor.appendChild(article);
   }
