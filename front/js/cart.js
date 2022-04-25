@@ -4,6 +4,7 @@ cart.forEach((item) => cartDisplayProducts(item));
 const orderButton = document.querySelector("#order");
 orderButton.addEventListener("click", (e) => cartCommandValidationOrder(e));
 
+/* permet d'afficher le produit dans le panier */
 function cartDisplayProducts(cartItemProduct) {
   const article = cartMakeProductArticle(cartItemProduct);
   const image = cartMakeProductImage(cartItemProduct);
@@ -21,6 +22,7 @@ function cartCommandShowArticle(article) {
   document.querySelector("#cart__items").appendChild(article);
 }
 
+/* permet de créer la description du panier */
 function cartMakeProductDesc(item) {
   const description = document.createElement("div");
   const subtitle = document.createElement("h2");
@@ -39,6 +41,7 @@ function cartMakeProductDesc(item) {
   return description;
 }
 
+/* permet de créer l'article du panier */
 function cartMakeProductArticle(itemArticle) {
   const article = document.createElement("article");
   article.classList.add("card__item");
@@ -46,6 +49,8 @@ function cartMakeProductArticle(itemArticle) {
   article.dataset.color = itemArticle.color;
   return article;
 }
+
+/* permet de récupérer l'image du produit */
 function cartMakeProductImage(itemImage) {
   const div = document.createElement("div");
   const image = document.createElement("img");
@@ -79,6 +84,7 @@ function makeRequestBody() {
   return body;
 }
 
+/* permet de créer un élément contenant le panier */
 function cartMakeCommandContent(cartItemProduct) {
   const cardItemContent = document.createElement("div");
   cardItemContent.classList.add("cart__item__content");
@@ -91,6 +97,7 @@ function cartMakeCommandContent(cartItemProduct) {
   return cardItemContent;
 }
 
+/* permet de créer une div rassemblant les paramètres du produit */
 function cartMakeCommandSettings(cartItemProduct) {
   const settings = document.createElement("div");
   settings.classList.add("cart__item__content__settings");
@@ -100,6 +107,7 @@ function cartMakeCommandSettings(cartItemProduct) {
   return settings;
 }
 
+/* permet de supprimer un objet via l'élément supprimer */
 function cartCommandSettingsMakeDelete(settings, item) {
   const div = document.createElement("div");
   div.classList.add("cart__item__content__settings__delete");
@@ -111,6 +119,7 @@ function cartCommandSettingsMakeDelete(settings, item) {
   settings.appendChild(div);
 }
 
+/* permet à l'utilisateur d'ajouter une ou plusieurs quantité(s) */
 function cartCommandSettingsAddQuantity(addSettings, addItem) {
   const quantity = document.createElement("div");
   const p = document.createElement("p");
@@ -135,6 +144,7 @@ function cartCommandSettingsAddQuantity(addSettings, addItem) {
   addSettings.appendChild(quantity);
 }
 
+/* permet d'afficher la quantité  totale de produits */
 function cartCommandShowQuantity() {
   const cartCommandTotal = document.querySelector("#totalQuantity");
   const totalOfAllProducts = cart.reduce(
@@ -144,6 +154,7 @@ function cartCommandShowQuantity() {
   cartCommandTotal.textContent = totalOfAllProducts;
 }
 
+/* Permet d'afficher le prix total des produits */
 function cartCommandShowPrice() {
   const totalPrice = document.querySelector("#totalPrice");
   const total = cart.reduce(
@@ -153,6 +164,7 @@ function cartCommandShowPrice() {
   totalPrice.textContent = total;
 }
 
+/* permet de delete un élément */
 function cartCommandDeleteProducts(item) {
   const articleToDelete = document.querySelector(
     `article[data-id="${item.id}"][data-color="${item.color}"]`
@@ -160,6 +172,7 @@ function cartCommandDeleteProducts(item) {
   articleToDelete.remove();
 }
 
+/* permet de delete  les éléments */
 function cartCommandDeleteAll(item) {
   const itemToDelete = cart.findIndex(
     (product) => product.id === item.id && product.color === item.color
@@ -182,6 +195,7 @@ function cartCommandUpdatePriceQuantity(id, newValue, item) {
   saveNewDataToCache(item);
 }
 
+/* permet de check la validité du formulaire ET de l'email */
 function cartCommandValidationOrder(e) {
   e.preventDefault();
   if (cart.length === 0) {
@@ -208,6 +222,7 @@ function cartCommandValidationOrder(e) {
     .catch((err) => console.error(err));
 }
 
+/* Permet de check si l'email est valide ou non */
 function cartCommandCheckEmailValid() {
   const email = document.querySelector("#email").value;
   const regex = /^[A-Za-z0-9+_.-]+@(.+)$/;
@@ -218,6 +233,7 @@ function cartCommandCheckEmailValid() {
   return false;
 }
 
+/* permet de check la validité du formulaire */
 function cartCommandFormValidation() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
@@ -230,6 +246,7 @@ function cartCommandFormValidation() {
   });
 }
 
+/* permet de récupérer le produit provenant du cache */
 function cartRecoverProductsInCache() {
   const numberOfItems = localStorage.length;
   for (let i = 0; i < numberOfItems; i++) {
@@ -239,17 +256,20 @@ function cartRecoverProductsInCache() {
   }
 }
 
+/* delete un item du cache et donc du panier */
 function deleteDataFromCache(item) {
   const key = `${item.id}-${item.color}`;
   localStorage.removeItem(key);
 }
 
+/* sauvegarde les données dans le local storage */
 function saveNewDataToCache(item) {
   const dataToSave = JSON.stringify(item);
   const key = `${item.id}-${item.color}`;
   localStorage.setItem(key, dataToSave);
 }
 
+/* permet de récupérer l'id du cache */
 function getIdsFromCache() {
   const numberOfProducts = localStorage.length;
   const idOfAll = [];
